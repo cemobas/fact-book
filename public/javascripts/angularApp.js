@@ -22,18 +22,18 @@ angular.module('factBook', ['ui.router'])
 		facts: [
 			{id: 1, title: 'whypoland', imp: 3,
 		  		comments: [
-				    {author: 'kasia', body: 'Cool post!', upvotes: 0},
+				    {author: 'kasia', body: 'Cool post!', tags: ['poland', 'expats', 'culture']},
 				    {author: 'Bob', body: 'Great idea but I hate it!', upvotes: 0}
 		  		]},
 			{id: 2, title: 'turcja', imp: 2,
 		  		comments: [
-				    {author: 'Aga', body: 'Been there!', upvotes: 0},
-				    {author: 'Tolga', body: 'Biktim lan', upvotes: 0}
+				    {author: 'Aga', body: 'Been there!', tags: ['stambul', 'turcja', 'culture']},
+				    {author: 'Tolga', body: 'Biktim lan', tags: ['holiday', 'business']}
 		  		]},
 			{id: 3, title: 'programming', imp: 5,
 		  		comments: [
-				    {author: 'Basia', body: 'Nie umiem!', upvotes: 0},
-				    {author: 'Witek', body: 'you never know what goes around', upvotes: 0}
+				    {author: 'Basia', body: 'Nie umiem!', tags: ['tech', 'business', 'hobbies']},
+				    {author: 'Witek', body: 'you never know what goes around', tags: ['hobbies', 'job']}
 		  		]}
 		]
 	};
@@ -68,17 +68,23 @@ angular.module('factBook', ['ui.router'])
 ])
 
 .controller('PostsCtrl', [
-	'$scope', '$stateParams', 'facts', '$filter',
-	function($scope, $stateParams, facts, $filter){
+	'$scope', '$stateParams', '$filter', 'facts',
+	function($scope, $stateParams, $filter, facts){
 		$scope.fact = $filter('filter')(facts.facts,{id : $stateParams.id})[0];
 		$scope.postComment = function(){
+				var tags = [];
 				if(!$scope.body || $scope.body === '') {
 					return;
+				}
+				if(!$scope.tags || $scope.tags === '') {
+					// do nothing
+				} else {
+					var tags = $scope.tags.split(',');
 				}
 				if($scope.fact.comments === "undefined") {
 					$scope.fact.comments = [];
 				}
-				$scope.fact.comments.push({author: 'Myself', body: $scope.body, upvotes: 0});
+				$scope.fact.comments.push({author: 'Myself', body: $scope.body, tags: tags});
 			};
 	}
 ]);
