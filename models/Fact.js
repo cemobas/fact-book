@@ -7,4 +7,9 @@ var FactSchema = new mongoose.Schema({
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }]
 });
 
+FactSchema.methods.upvote = function(cb) {
+  this.imp += 1;
+  this.save(cb);
+};
+
 mongoose.model('Fact', FactSchema);
